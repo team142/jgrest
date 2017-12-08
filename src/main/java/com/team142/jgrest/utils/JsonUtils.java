@@ -1,6 +1,5 @@
 package com.team142.jgrest.utils;
 
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -25,8 +24,8 @@ public class JsonUtils {
         OBJECT_MAPPER.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
 
     }
-    
-    public static Object jsonToList(String json, Class clazz) throws IOException {
+
+    public static List<Object> jsonToList(String json, Class clazz) throws IOException {
         return OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
     }
 
@@ -37,5 +36,9 @@ public class JsonUtils {
             Logger.getLogger(JsonUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
+    }
+
+    public static void readValue(String json) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.team142.jgrest.layers.one;
+package com.team142.jgrest.framework.generic;
 
-import com.team142.jgrest.utils.HttpUtils;
+import com.team142.jgrest.framework.nio.HttpUtils;
 import java.net.SocketTimeoutException;
 
 /**
  *
  * @author just1689
  */
-public class Inserter {
+public class Updater {
 
-    public static void insert(String url, Object o) throws SocketTimeoutException {
-        HttpUtils.doPostAndForget(url, o);
+    public static void update(String url, Object o) throws SocketTimeoutException {
+        HttpUtils.doPatchAndForget(url, o);
     }
 
 }
