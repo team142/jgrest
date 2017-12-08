@@ -2,9 +2,9 @@ package com.team142.jgrest.controller;
 
 import com.team142.jgrest.model.Condition;
 import com.team142.jgrest.model.GrestDB;
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class Api {
 
     private GrestDB database;
