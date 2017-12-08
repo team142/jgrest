@@ -23,6 +23,13 @@ public class Api {
 
     }
 
+    public void delete(String table, Condition condition) throws Exception {
+        String url = UrlUtils.getUrl(database, table, condition);
+        HttpUtils.doDeleteAndForget(url);
+
+    }
+
+
     public String getOneByCondition(String table, Condition condition) throws Exception {
         String url = UrlUtils.getUrlLimit1(database, table, condition);
         return HttpUtils.doGet(url);

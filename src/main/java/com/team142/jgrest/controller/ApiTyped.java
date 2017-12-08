@@ -2,40 +2,64 @@ package com.team142.jgrest.controller;
 
 import com.team142.jgrest.model.Condition;
 import com.team142.jgrest.model.GrestDB;
-import lombok.Value;
+import com.team142.jgrest.utils.JsonUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
-@Value
+
 public class ApiTyped<T> {
 
     private GrestDB database;
     private String table;
+    private Class clazz;
     private int limit;
+    private Api api;
+
+    public ApiTyped(GrestDB database, String table, Class clazz, int limit) {
+        this.database = database;
+        this.table = table;
+        this.clazz = clazz;
+        this.limit = limit;
+        this.api = new Api(database);
+
+    }
 
     public void insert(T object) throws Exception {
-        //TODO: implement
+        api.insert(table, object);
+
     }
 
     public void update(T object, Condition condition) throws Exception {
-        //TODO: implement
+        api.update(table, object, condition);
+
     }
 
     public void delete(Condition condition) throws Exception {
-        //TODO: implement
+        api.delete(table, condition);
+
     }
 
     public T getOneByCondition(Condition condition) throws Exception {
-        //TODO: implement
+        ArrayList<T> rows = new ArrayList<>();
+        getManyByCondition(condition, rows);
+        if (rows.isEmpty()) return null;
+        return rows.get(0);
+
     }
 
     public void getManyByCondition(Condition condition, ArrayList<T> results) throws Exception {
-        //TODO: implement
+        String json = api.getManyByCondition(table, condition);
+        List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
+        results.addAll(rows);
+
     }
 
     public void getAll(ArrayList<T> results) throws Exception {
-        //TODO: implement
-    }
+        String json = api.getAll(table);
+        List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
+        results.addAll(rows);
 
+    }
 
 }
