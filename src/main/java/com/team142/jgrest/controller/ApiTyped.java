@@ -10,11 +10,11 @@ import java.util.List;
 
 public class ApiTyped<T> {
 
-    private GrestDB database;
-    private String table;
-    private Class clazz;
-    private int limit;
-    private Api api;
+    private final GrestDB database;
+    private final String table;
+    private final Class clazz;
+    private final int limit;
+    private final Api api;
 
     public ApiTyped(GrestDB database, String table, Class clazz, int limit) {
         this.database = database;
