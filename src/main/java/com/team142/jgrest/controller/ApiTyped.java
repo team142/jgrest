@@ -41,15 +41,15 @@ public class ApiTyped<T> {
     }
 
     public T getOneByCondition(Condition condition) throws Exception {
-        ArrayList<T> rows = new ArrayList<>();
-        getManyByCondition(condition, rows);
+        String json = api.getManyByCondition(table, condition, true);
+        List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
         if (rows.isEmpty()) return null;
         return rows.get(0);
 
     }
 
     public void getManyByCondition(Condition condition, ArrayList<T> results) throws Exception {
-        String json = api.getManyByCondition(table, condition);
+        String json = api.getManyByCondition(table, condition, false);
         List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
         results.addAll(rows);
 

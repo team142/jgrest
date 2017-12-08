@@ -6,17 +6,25 @@ import com.team142.jgrest.model.GrestDB;
 public class UrlUtils {
 
     public static String getUrl(GrestDB database, String table) {
-        //TODO: implement
-        return "";
+        return database.getUrl() + table;
+
     }
 
-    public static String getUrl(GrestDB database, String table, Condition condition) {
-        //TODO: implement
-        return "";
+    public static String getUrl(GrestDB database, String table, Condition condition, boolean onlyOne) {
+
+        //Start with base url
+        StringBuilder url = new StringBuilder(getUrl(database, table));
+
+        //TODO: implement conditions
+
+        //Add limit
+        if (onlyOne) {
+            url.append(condition == null ? "?" : "&");
+            url.append("limit=" + 1);
+
+        }
+        return url.toString();
+
     }
 
-    public static String getUrlLimit1(GrestDB database, String table, Condition condition) {
-        //TODO: implement
-        return "";
-    }
 }

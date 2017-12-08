@@ -13,20 +13,22 @@ We do plan on adding the project to Maven central once the project reaches a cer
 
 ## Features
 
+
 ### Completed
 
-...  
+    - Insert a row
+    - Delete a row
+    - Get all rows in a table
 
 ### Next to be implemented
 
+    - Single condition
+    - Update a row
 
 
 ### Planned
 
-    - Insert a row
-    - Delete a row
-    - Update a row
+    - Multiple conditions
     - Get a row by a condition
-    - Get all rows in a table
     - Get rows from a table by a simple query.
     - Get rows from a table by a complex query.

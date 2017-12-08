@@ -18,26 +18,20 @@ public class Api {
     }
 
     public void update(String table, Object object, Condition condition) throws Exception {
-        String url = UrlUtils.getUrl(database, table, condition);
+        String url = UrlUtils.getUrl(database, table, condition, false);
         HttpUtils.doPatchAndForget(url, object);
 
     }
 
     public void delete(String table, Condition condition) throws Exception {
-        String url = UrlUtils.getUrl(database, table, condition);
+        String url = UrlUtils.getUrl(database, table, condition, false);
         HttpUtils.doDeleteAndForget(url);
 
     }
 
 
-    public String getOneByCondition(String table, Condition condition) throws Exception {
-        String url = UrlUtils.getUrlLimit1(database, table, condition);
-        return HttpUtils.doGet(url);
-
-    }
-
-    public String getManyByCondition(String table, Condition condition) throws Exception {
-        String url = UrlUtils.getUrl(database, table, condition);
+    public String getManyByCondition(String table, Condition condition, boolean onlyOne) throws Exception {
+        String url = UrlUtils.getUrl(database, table, condition, onlyOne);
         return HttpUtils.doGet(url);
 
     }
