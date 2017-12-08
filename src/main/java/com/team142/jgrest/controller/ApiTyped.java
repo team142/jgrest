@@ -7,17 +7,14 @@ import com.team142.jgrest.utils.JsonUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ApiTyped<T> {
 
-    private final GrestDB database;
     private final String table;
     private final Class clazz;
     private final int limit;
     private final Api api;
 
     public ApiTyped(GrestDB database, String table, Class clazz, int limit) {
-        this.database = database;
         this.table = table;
         this.clazz = clazz;
         this.limit = limit;
@@ -42,22 +39,27 @@ public class ApiTyped<T> {
 
     public T getOneByCondition(Condition condition) throws Exception {
         String json = api.getManyByCondition(table, condition, true);
-        List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
-        if (rows.isEmpty()) return null;
+        List<T> rows = (List<T>) JsonUtils.jsonToList(json, clazz);
+//        List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
+        if (rows.isEmpty()) {
+            return null;
+        }
         return rows.get(0);
 
     }
 
     public void getManyByCondition(Condition condition, ArrayList<T> results) throws Exception {
         String json = api.getManyByCondition(table, condition, false);
-        List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
+        List<T> rows = (List<T>) JsonUtils.jsonToList(json, clazz);
+//        List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
         results.addAll(rows);
 
     }
 
     public void getAll(ArrayList<T> results) throws Exception {
         String json = api.getAll(table);
-        List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
+        List<T> rows = (List<T>) JsonUtils.jsonToList(json, clazz);
+//        List<T> rows = JsonUtils.OBJECT_MAPPER.readValue(json, JsonUtils.OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
         results.addAll(rows);
 
     }
