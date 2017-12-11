@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.team142.jgrest.framework.api;
+package com.team142.jgrest.framework.api.service;
 
+import com.team142.jgrest.framework.api.util.UrlBuilder;
 import com.team142.jgrest.framework.generic.Deleter;
 import com.team142.jgrest.framework.generic.Inserter;
 import com.team142.jgrest.framework.generic.Updater;

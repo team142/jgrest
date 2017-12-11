@@ -1,4 +1,4 @@
-package com.team142.jgrest.framework.api;
+package com.team142.jgrest.framework.api.util;
 
 import com.team142.jgrest.model.Condition;
 import com.team142.jgrest.model.Database;
