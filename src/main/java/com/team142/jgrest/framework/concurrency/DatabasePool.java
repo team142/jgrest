@@ -38,6 +38,8 @@ public class DatabasePool {
                     int now = current.incrementAndGet();
                     if (now > max) {
                         current.decrementAndGet();
+                        System.err.println("This should never happen... "
+                                + "threadpool overbooked");
                         continue;
                     }
                     return;
