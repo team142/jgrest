@@ -41,14 +41,6 @@ public class HttpClient {
         try {
             HttpURLConnection connection = setupConnection(path, "POST");
 
-//            URL url = new URL(path);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoOutput(true);
-//            connection.setRequestMethod("POST");
-//            connection.setRequestProperty("Content-type", "application/json");
-//            connection.setConnectTimeout(1000);
-//            connection.setReadTimeout(3000);
-
             JsonUtils.OBJECT_MAPPER.writeValue(connection.getOutputStream(), item);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Failed : HTTP error code : "
@@ -83,14 +75,6 @@ public class HttpClient {
         try {
 
             HttpURLConnection connection = setupConnection(path, "PATCH");
-//            URL url = new URL(path);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoOutput(true);
-//            connection.setRequestProperty("Content-type", "application/json");
-//            connection.setConnectTimeout(1000);
-//            connection.setReadTimeout(3000);
-//            setVerb(connection, "PATCH");
-//            setRequestMethod(connection, "PATCH");
 
             JsonUtils.OBJECT_MAPPER.writeValue(connection.getOutputStream(), item);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED
@@ -111,10 +95,8 @@ public class HttpClient {
 //                System.out.println(output);
             }
 
-            //TODO: handle the output
             connection.disconnect();
         } catch (SocketTimeoutException ex) {
-//            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
             databasePool.giveBack();
             throw ex;
 
@@ -133,16 +115,7 @@ public class HttpClient {
         try {
 
             HttpURLConnection connection = setupConnection(path, "DELETE");
-            
-//            URL url = new URL(path);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoOutput(true);
-//            connection.setRequestMethod("POST");
-//            connection.setRequestProperty("Content-type", "application/json");
-//            connection.setConnectTimeout(1000);
-//            connection.setReadTimeout(3000);
 
-//            setRequestMethod(connection, "DELETE");
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK && connection.getResponseCode() != HttpURLConnection.HTTP_NO_CONTENT) {
                 databasePool.giveBack();
                 throw new RuntimeException("Failed : HTTP error code : "
@@ -158,7 +131,6 @@ public class HttpClient {
                 out.append(output);
             }
 
-            //TODO: handle the output
             connection.disconnect();
 
         } catch (SocketTimeoutException ex) {
@@ -180,13 +152,6 @@ public class HttpClient {
         try {
 
             HttpURLConnection connection = setupConnection(path, "GET");
-//            URL url = new URL(path);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoOutput(true);
-//            connection.setRequestMethod("GET");
-//            connection.setRequestProperty("Content-type", "application/json");
-//            connection.setConnectTimeout(10000);
-//            connection.setReadTimeout(10000);
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 databasePool.giveBack();
@@ -203,7 +168,6 @@ public class HttpClient {
                 out.append(output);
             }
 
-            //TODO: handle the output
             connection.disconnect();
 
             databasePool.giveBack();
@@ -228,14 +192,6 @@ public class HttpClient {
         try {
 
             HttpURLConnection connection = setupConnection(path, "GET");
-            
-//            URL url = new URL(path);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoOutput(true);
-//            connection.setRequestMethod("GET");
-//            connection.setRequestProperty("Content-type", "application/json");
-//            connection.setConnectTimeout(10000);
-//            connection.setReadTimeout(10000);
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Failed : HTTP error code : "
