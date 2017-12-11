@@ -7,6 +7,7 @@ package com.team142.jgrest.framework.api.util;
 
 import com.team142.jgrest.model.Condition;
 import com.team142.jgrest.model.Database;
+import java.io.UnsupportedEncodingException;
 import static org.junit.Assert.*;
 
 /**
@@ -35,7 +36,7 @@ public class UrlBuilderTest {
      * Test of getUrl method, of class UrlBuilder.
      */
     @org.junit.Test
-    public void testGetUrl_4args() {
+    public void testGetUrl_4args() throws UnsupportedEncodingException {
         System.out.println("getUrl");
         String table = "table";
         Condition condition = new Condition("id", "eq", "1");
@@ -58,12 +59,12 @@ public class UrlBuilderTest {
      * Test of getUrl method, of class UrlBuilder.
      */
     @org.junit.Test
-    public void testGetUrl_Encoding() {
+    public void testGetUrl_Encoding() throws UnsupportedEncodingException {
         System.out.println("Testing getUrl by condition with encoding");
         String table = "table";
         Condition condition = new Condition("title", "eq", "Penguins are majestic");
         boolean onlyOne = false;
-        String expResult = "http://domain.com/table?id=eq.1";
+        String expResult = "http://domain.com/table?title=eq.Penguins+are+majestic";
         String result = UrlBuilder.getUrl(TEST_DATABASE, table, condition, onlyOne);
 
         if (!result.equals(expResult)) {
@@ -76,6 +77,5 @@ public class UrlBuilderTest {
         assertEquals(expResult, result);
 
     }
-
 
 }
