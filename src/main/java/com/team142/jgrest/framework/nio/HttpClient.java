@@ -36,7 +36,7 @@ public class HttpClient {
 
     }
 
-    public static void doPostAndForget(DatabasePool databasePool, String path, Object item) throws SocketTimeoutException, TimeoutException {
+    public static void doPostAndForget(DatabasePool databasePool, String path, Object item) throws TimeoutException, SocketTimeoutException {
         databasePool.waitForNext();
         try {
             HttpURLConnection connection = setupConnection(path, "POST");
