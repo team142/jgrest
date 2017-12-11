@@ -37,8 +37,9 @@ public class TableReader<T> {
     public T getItem(Condition condition) throws SocketException, IOException, TimeoutException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         String json = HttpClient.doGet(database.getDatabasePool(), url);
-        T item = (T) JsonUtils.OBJECT_MAPPER.readValue(json, clazz);
-        return item;
+        List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
+        if (list.isEmpty()) return null;
+        return list.get(0);
 
     }
 
