@@ -17,6 +17,7 @@ import java.util.List;
 /**
  *
  * @author just1689
+ * @param <T>
  */
 public class TableReader<T> {
 

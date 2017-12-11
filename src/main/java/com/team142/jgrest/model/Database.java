@@ -5,6 +5,7 @@
  */
 package com.team142.jgrest.model;
 
+import com.team142.jgrest.framework.concurrency.DatabasePool;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,7 +15,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Database {
-
+    
     private String url;
+    private DatabasePool databasePool;
+    
 
 }
