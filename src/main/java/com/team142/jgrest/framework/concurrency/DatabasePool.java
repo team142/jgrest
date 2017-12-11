@@ -30,8 +30,13 @@ public class DatabasePool {
     }
 
     public void waitForNext() throws TimeoutException {
-        long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < timeoutSecondsMs) {
+        System.out.println("C: " + System.currentTimeMillis());
+        long waitUntil = System.currentTimeMillis() + timeoutSecondsMs;
+        System.out.println("w: " + waitUntil);
+        
+        int checks = 0;
+        while (System.currentTimeMillis() < waitUntil) {
+            checks++;
             synchronized (current) {
                 if (current.get() < max) {
                     int now = current.incrementAndGet();
@@ -39,11 +44,12 @@ public class DatabasePool {
                         current.decrementAndGet();
                         continue;
                     }
-                    break;
+                    return;
                 }
             }
+            ThreadUtils.sleepForNow(sleep);
         }
-        ThreadUtils.sleepForNow(sleep);
+        System.out.println("Checks... " + checks);
         throw new TimeoutException();
 
     }
