@@ -1,5 +1,6 @@
 package com.team142.jgrest.framework.nio;
 
+import com.team142.jgrest.exceptions.JGrestException;
 import com.team142.jgrest.framework.concurrency.DatabasePool;
 import com.team142.jgrest.model.Database;
 import com.team142.jgrest.utils.JsonUtils;
@@ -10,9 +11,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -25,22 +23,32 @@ import java.util.logging.Logger;
  */
 public class HttpClient {
 
-    private static HttpURLConnection setupConnection(Database database, String path, String method) throws MalformedURLException, ProtocolException, IOException {
-        URL url = new URL(path);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setDoOutput(true);
-        setVerb(connection, method);
-        connection.setRequestProperty("Content-type", "application/json");
-        connection.setConnectTimeout(database.getDatabasePool().getTimeoutSecondsMs());
-        connection.setReadTimeout(database.getDatabasePool().getReadTimeout());
+    private static HttpURLConnection setupConnection(Database database, String path, String method) throws JGrestException {
+        HttpURLConnection connection = null;
+        try {
+            URL url;
+            url = new URL(path);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            setVerb(connection, method);
+            connection.setRequestProperty("Content-type", "application/json");
+            connection.setConnectTimeout(database.getDatabasePool().getTimeoutSecondsMs());
+            connection.setReadTimeout(database.getDatabasePool().getReadTimeout());
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
+            throw new JGrestException(ex);
+        } catch (IOException ex) {
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
+            throw new JGrestException(ex);
+        }
         return connection;
 
     }
 
-    public static void doPostAndForget(Database database, String path, Object item) throws TimeoutException, SocketTimeoutException {
+    public static void doPostAndForget(Database database, String path, Object item) throws JGrestException {
         DatabasePool databasePool = database.getDatabasePool();
-        databasePool.waitForNext();
         try {
+            databasePool.waitForNext();
             HttpURLConnection connection = setupConnection(database, path, "POST");
 
             JsonUtils.OBJECT_MAPPER.writeValue(connection.getOutputStream(), item);
@@ -49,34 +57,26 @@ public class HttpClient {
                         + connection.getResponseCode());
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (connection.getInputStream())));
-
-            String output;
-            while ((output = br.readLine()) != null) {
-//                System.out.println(output);
-            }
+            String output = connectionToString(connection);
             connection.disconnect();
 
-        } catch (SocketTimeoutException ex) {
+        } catch (JGrestException ex) {
             databasePool.giveBack();
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
-
-        } catch (MalformedURLException ex) {
+        } catch (TimeoutException | IOException ex) {
+            databasePool.giveBack();
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-
+            throw new JGrestException(ex);
         }
         databasePool.giveBack();
 
     }
 
-    public static void doPatchAndForget(Database database, String path, Object item) throws SocketTimeoutException, TimeoutException {
+    public static void doPatchAndForget(Database database, String path, Object item) throws JGrestException {
         DatabasePool databasePool = database.getDatabasePool();
-        databasePool.waitForNext();
         try {
-
+            databasePool.waitForNext();
             HttpURLConnection connection = setupConnection(database, path, "PATCH");
 
             JsonUtils.OBJECT_MAPPER.writeValue(connection.getOutputStream(), item);
@@ -85,39 +85,30 @@ public class HttpClient {
                     && connection.getResponseCode() != HttpURLConnection.HTTP_NO_CONTENT) {
 
                 System.out.println(connection.getResponseMessage());
-
                 throw new RuntimeException("Failed : HTTP error code : "
                         + connection.getResponseCode());
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (connection.getInputStream())));
-
-            String output;
-            while ((output = br.readLine()) != null) {
-//                System.out.println(output);
-            }
-
+            String output = connectionToString(connection);
             connection.disconnect();
-        } catch (SocketTimeoutException ex) {
+
+        } catch (JGrestException ex) {
             databasePool.giveBack();
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
-
-        } catch (MalformedURLException ex) {
+        } catch (TimeoutException | IOException ex) {
+            databasePool.giveBack();
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-
+            throw new JGrestException(ex);
         }
         databasePool.giveBack();
 
     }
 
-    public static void doDeleteAndForget(Database database, String path) throws SocketTimeoutException, TimeoutException {
+    public static void doDeleteAndForget(Database database, String path) throws JGrestException {
         DatabasePool databasePool = database.getDatabasePool();
-        databasePool.waitForNext();
         try {
-
+            databasePool.waitForNext();
             HttpURLConnection connection = setupConnection(database, path, "DELETE");
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK && connection.getResponseCode() != HttpURLConnection.HTTP_NO_CONTENT) {
@@ -126,36 +117,27 @@ public class HttpClient {
                         + connection.getResponseCode());
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (connection.getInputStream())));
-
-            StringBuilder out = new StringBuilder();
-            String output;
-            while ((output = br.readLine()) != null) {
-                out.append(output);
-            }
-
+            String output = connectionToString(connection);
             connection.disconnect();
 
-        } catch (SocketTimeoutException ex) {
+        } catch (JGrestException ex) {
             databasePool.giveBack();
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
-
-        } catch (MalformedURLException ex) {
+        } catch (TimeoutException | IOException ex) {
+            databasePool.giveBack();
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-
+            throw new JGrestException(ex);
         }
         databasePool.giveBack();
 
     }
 
-    public static String doGet(Database database, String path) throws SocketException, TimeoutException {
+    public static String doGet(Database database, String path) throws JGrestException {
         DatabasePool databasePool = database.getDatabasePool();
-        databasePool.waitForNext();
+        StringBuilder out = new StringBuilder();
         try {
-
+            databasePool.waitForNext();
             HttpURLConnection connection = setupConnection(database, path, "GET");
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -164,39 +146,28 @@ public class HttpClient {
                         + connection.getResponseCode());
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (connection.getInputStream())));
-
-            StringBuilder out = new StringBuilder();
-            String output;
-            while ((output = br.readLine()) != null) {
-                out.append(output);
-            }
-
+            String output = connectionToString(connection);
             connection.disconnect();
 
+        } catch (JGrestException ex) {
             databasePool.giveBack();
-            return out.toString();
-
-        } catch (SocketException ex) {
-            databasePool.giveBack();
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
-        } catch (MalformedURLException ex) {
+        } catch (TimeoutException | IOException ex) {
+            databasePool.giveBack();
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
+            throw new JGrestException(ex);
         }
-        databasePool.giveBack();
 
-        return "";
+        databasePool.giveBack();
+        return out.toString();
 
     }
 
-    public static HttpResponseBundle doGetForBundle(Database database, String path) throws SocketException, TimeoutException {
+    public static HttpResponseBundle doGetForBundle(Database database, String path) throws JGrestException {
         DatabasePool databasePool = database.getDatabasePool();
-        databasePool.waitForNext();
         try {
-
+            databasePool.waitForNext();
             HttpURLConnection connection = setupConnection(database, path, "GET");
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -204,32 +175,23 @@ public class HttpClient {
                         + connection.getResponseCode());
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (connection.getInputStream())));
-
-            StringBuilder out = new StringBuilder();
-            String output;
-            while ((output = br.readLine()) != null) {
-                out.append(output);
-            }
-
+            String output = connectionToString(connection);
             Map<String, List<String>> headerFields = connection.getHeaderFields();
-            HttpResponseBundle httpResponseBundle = new HttpResponseBundle(out.toString(), headerFields);
+            HttpResponseBundle httpResponseBundle = new HttpResponseBundle(output, headerFields);
             connection.disconnect();
 
             databasePool.giveBack();
             return httpResponseBundle;
 
-        } catch (SocketException ex) {
+        } catch (JGrestException ex) {
+            databasePool.giveBack();
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
-        } catch (MalformedURLException ex) {
+        } catch (TimeoutException | IOException ex) {
+            databasePool.giveBack();
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
+            throw new JGrestException(ex);
         }
-
-        databasePool.giveBack();
-        return null;
 
     }
 
@@ -262,6 +224,23 @@ public class HttpClient {
                 }
                 break;
         }
+    }
+
+    public static String connectionToString(HttpURLConnection connection) {
+        StringBuilder out = new StringBuilder();
+        try {
+            BufferedReader br;
+            br = new BufferedReader(new InputStreamReader(
+                    (connection.getInputStream())));
+            String output;
+            while ((output = br.readLine()) != null) {
+                out.append(output);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return out.toString();
+
     }
 
 }

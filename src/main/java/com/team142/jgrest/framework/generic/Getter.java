@@ -5,16 +5,15 @@
  */
 package com.team142.jgrest.framework.generic;
 
+import com.team142.jgrest.exceptions.JGrestException;
 import com.team142.jgrest.model.HttpResponseBundle;
 import com.team142.jgrest.model.MultipleResults;
 import com.team142.jgrest.framework.nio.HttpClient;
 import com.team142.jgrest.model.Database;
 import com.team142.jgrest.utils.JsonUtils;
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -30,7 +29,7 @@ public class Getter<T> {
         this.database = database;
     }
 
-    public T getOne(String url) throws SocketException, IOException, TimeoutException {
+    public T getOne(String url) throws JGrestException, IOException {
         String json = HttpClient.doGet(database, url);
         List<T> rows = (List<T>) JsonUtils.jsonToList(json, clazz);
         if (rows.isEmpty()) {
@@ -39,7 +38,7 @@ public class Getter<T> {
         return rows.get(0);
     }
 
-    public MultipleResults<T> getMoreThanOne(String url) throws SocketException, IOException, TimeoutException {
+    public MultipleResults<T> getMoreThanOne(String url) throws JGrestException, IOException {
         HttpResponseBundle res = HttpClient.doGetForBundle(database, url);
         List<T> rows = (List<T>) JsonUtils.jsonToList(res.getBody(), clazz);
         if (rows.isEmpty()) {

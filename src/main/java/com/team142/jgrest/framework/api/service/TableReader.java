@@ -5,6 +5,7 @@
  */
 package com.team142.jgrest.framework.api.service;
 
+import com.team142.jgrest.exceptions.JGrestException;
 import com.team142.jgrest.framework.api.util.UrlBuilder;
 import com.team142.jgrest.framework.nio.HttpClient;
 import com.team142.jgrest.model.Condition;
@@ -12,9 +13,8 @@ import com.team142.jgrest.model.Database;
 import com.team142.jgrest.model.MultipleResults;
 import com.team142.jgrest.utils.JsonUtils;
 import java.io.IOException;
-import java.net.SocketException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -34,7 +34,7 @@ public class TableReader<T> {
 
     }
 
-    public T getItem(Condition condition) throws SocketException, IOException, TimeoutException {
+    public T getItem(Condition condition) throws JGrestException, UnsupportedEncodingException, IOException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         String json = HttpClient.doGet(database, url);
         List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
@@ -45,7 +45,7 @@ public class TableReader<T> {
 
     }
 
-    public MultipleResults<T> getItems(Condition condition) throws SocketException, IOException, TimeoutException {
+    public MultipleResults<T> getItems(Condition condition) throws JGrestException, UnsupportedEncodingException, IOException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         MultipleResults<T> results = new MultipleResults<>();
         String json = HttpClient.doGet(database, url);
@@ -55,7 +55,7 @@ public class TableReader<T> {
 
     }
 
-    public MultipleResults<T> getItems(Condition condition, int start, int end) throws SocketException, IOException, TimeoutException {
+    public MultipleResults<T> getItems(Condition condition, int start, int end) throws JGrestException, UnsupportedEncodingException, IOException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         MultipleResults<T> results = new MultipleResults<>();
         String json = HttpClient.doGet(database, url);

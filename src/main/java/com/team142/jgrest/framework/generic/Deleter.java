@@ -5,10 +5,9 @@
  */
 package com.team142.jgrest.framework.generic;
 
+import com.team142.jgrest.exceptions.JGrestException;
 import com.team142.jgrest.framework.nio.HttpClient;
 import com.team142.jgrest.model.Database;
-import java.net.SocketTimeoutException;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class Deleter {
 
-    public static void sync(Database database, String url) throws SocketTimeoutException, TimeoutException {
+    public static void sync(Database database, String url) throws JGrestException {
         HttpClient.doDeleteAndForget(database, url);
     }
 
@@ -26,7 +25,7 @@ public class Deleter {
         new Thread(() -> {
             try {
                 HttpClient.doDeleteAndForget(database, url);
-            } catch (SocketTimeoutException | TimeoutException ex) {
+            } catch (JGrestException ex) {
                 Logger.getLogger(Deleter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }).start();
