@@ -14,7 +14,10 @@ import com.team142.jgrest.model.MultipleResults;
 import com.team142.jgrest.utils.JsonUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,34 +37,54 @@ public class TableReader<T> {
 
     }
 
-    public T getItem(Condition condition) throws JGrestException, UnsupportedEncodingException, IOException {
-        String url = UrlBuilder.getUrl(database, table, condition, true);
-        String json = HttpClient.doGet(database, url);
-        List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
-        if (list.isEmpty()) {
-            return null;
+    public T getItem(Condition condition) throws JGrestException {
+        List<T> results = new ArrayList<>();
+        try {
+            String url = UrlBuilder.getUrl(database, table, condition, true);
+            String json = HttpClient.doGet(database, url);
+            results.addAll((List<T>) JsonUtils.jsonToList(json, clazz));
+            if (results.isEmpty()) {
+                return null;
+            }
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return list.get(0);
+        return results.get(0);
 
     }
 
-    public MultipleResults<T> getItems(Condition condition) throws JGrestException, UnsupportedEncodingException, IOException {
-        String url = UrlBuilder.getUrl(database, table, condition, true);
+    public MultipleResults<T> getItems(Condition condition) throws JGrestException {
         MultipleResults<T> results = new MultipleResults<>();
-        String json = HttpClient.doGet(database, url);
-        List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
-        results.getResults().addAll(list);
+        try {
+            String url = UrlBuilder.getUrl(database, table, condition, true);
+            String json = HttpClient.doGet(database, url);
+            List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
+            results.getResults().addAll(list);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return results;
 
     }
 
-    public MultipleResults<T> getItems(Condition condition, int start, int end) throws JGrestException, UnsupportedEncodingException, IOException {
-        String url = UrlBuilder.getUrl(database, table, condition, true);
+    public MultipleResults<T> getItems(Condition condition, int start, int end) throws JGrestException {
         MultipleResults<T> results = new MultipleResults<>();
-        String json = HttpClient.doGet(database, url);
-        List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
-        //TODO: show number of rows remaining...
-        results.getResults().addAll(list);
+        try {
+            String url;
+            url = UrlBuilder.getUrl(database, table, condition, true);
+            String json = HttpClient.doGet(database, url);
+            List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
+            //TODO: show number of rows remaining...
+            results.getResults().addAll(list);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return results;
 
     }
