@@ -40,16 +40,19 @@ public class UrlBuilder {
         //Start with base url
         StringBuilder url = new StringBuilder(getUrl(database, table));
 
-        url.append("?");
-
         if (conditionBundle.getJoiner() == null && conditionBundle.getConditions() != null && !conditionBundle.getConditions().isEmpty()) {
-            for (int i = 0; i < conditionBundle.getConditions().size(); i++) {
-                if (i > 0) {
-                    url.append("&");
-                }
-                url.append(conditionBundle.getConditions().get(i).toQuery(true));
-            }
+            url.append(conditionBundle.toSimpleQuery());
+            return url.toString();
         }
+
+        if (conditionBundle.getJoiner() != null && conditionBundle.getConditions() != null && !conditionBundle.getConditions().isEmpty() ) {
+            url.append("?");
+            url.append(conditionBundle.toComplexQuery(true));
+            
+
+        }
+
+
 
         //TODO: Add limit
         return url.toString();

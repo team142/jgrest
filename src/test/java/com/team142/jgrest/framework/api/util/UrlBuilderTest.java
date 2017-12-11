@@ -9,6 +9,7 @@ import com.team142.jgrest.model.Condition;
 import com.team142.jgrest.model.ConditionBundle;
 import com.team142.jgrest.model.Database;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 /**
@@ -85,15 +86,77 @@ public class UrlBuilderTest {
      * @throws java.io.UnsupportedEncodingException
      */
     @org.junit.Test
-    public void testGetUrl_ComplexCondition1() throws UnsupportedEncodingException {
+    public void testGetUrl_SimpleCompoundQuery() throws UnsupportedEncodingException {
         System.out.println("getUrl");
         String table = "people";
         Condition condition1 = new Condition("age", "gte", "18");
         Condition condition2 = new Condition("student", "is", "true");
         ConditionBundle bundle = new ConditionBundle(null, condition1, condition2);
-        
+
         boolean onlyOne = false;
         String expResult = "http://domain.com/people?age=gte.18&student=is.true";
+        String result = UrlBuilder.getUrl(TEST_DATABASE, table, bundle, onlyOne);
+
+        if (!result.equals(expResult)) {
+            System.out.println("Expected");
+            System.out.println(expResult);
+            System.out.println("Instead got");
+            System.out.println(result);
+        }
+
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Test of getUrl method, of class UrlBuilder.
+     *
+     * @throws java.io.UnsupportedEncodingException
+     */
+    @org.junit.Test
+    public void testGetUrl_ComplexCondition2() throws UnsupportedEncodingException {
+        System.out.println("getUrl");
+        String table = "people";
+        Condition condition1 = new Condition("age", "gte", "14");
+        Condition condition2 = new Condition("age", "lte", "18");
+        ConditionBundle bundle = new ConditionBundle("or", condition1, condition2);
+
+        boolean onlyOne = false;
+        String expResult = "http://domain.com/people?or=(age.gte.14,age.lte.18)";
+        String result = UrlBuilder.getUrl(TEST_DATABASE, table, bundle, onlyOne);
+
+        if (!result.equals(expResult)) {
+            System.out.println("Expected");
+            System.out.println(expResult);
+            System.out.println("Instead got");
+            System.out.println(result);
+        }
+
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Test of getUrl method, of class UrlBuilder.
+     *
+     * @throws java.io.UnsupportedEncodingException
+     */
+    @org.junit.Test
+    public void testGetUrl_ComplexCondition3() throws UnsupportedEncodingException {
+        System.out.println("getUrl");
+        String table = "people";
+        Condition condition1 = new Condition("grade", "gte", "90");
+        Condition condition2 = new Condition("student", "is", "true");
+        Condition condition3 = new Condition("age", "gte", "14");
+        Condition condition4 = new Condition("age", "is", "null");
+
+        ConditionBundle bundle = new ConditionBundle("and", condition1, condition2);
+        ConditionBundle bundle2 = new ConditionBundle("or", condition3, condition4);
+        bundle.setConditionBundles(new ArrayList<>());
+        bundle.getConditionBundles().add(bundle2);
+
+        boolean onlyOne = false;
+        String expResult = "http://domain.com/people?and=(grade.gte.90,student.is.true,or(age.gte.14,age.is.null))";
         String result = UrlBuilder.getUrl(TEST_DATABASE, table, bundle, onlyOne);
 
         if (!result.equals(expResult)) {
