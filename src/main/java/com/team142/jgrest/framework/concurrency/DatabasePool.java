@@ -15,17 +15,21 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DatabasePool {
 
-    public static final DatabasePool STANDARD_TINY_POOL = new DatabasePool(2, 20, 10);
+    public static final DatabasePool STANDARD_TINY_POOL = new DatabasePool(2, 20, 10, 2000, 1000);
 
     private final AtomicInteger current = new AtomicInteger(0);
     private final int max;
     private final int sleep;
     private final int timeoutSecondsMs;
+    private final long connectionTimeout;
+    private final long readTimeout;
 
-    public DatabasePool(int size, int sleepMs, int timeoutSeconds) {
+    public DatabasePool(int size, int sleepMs, int timeoutSeconds, long connectionTimeoutMs, long readTimeoutMs) {
         this.max = size;
         this.sleep = sleepMs;
         this.timeoutSecondsMs = timeoutSeconds * 1000;
+        this.connectionTimeout = connectionTimeoutMs;
+        this.readTimeout = readTimeoutMs;
 
     }
 

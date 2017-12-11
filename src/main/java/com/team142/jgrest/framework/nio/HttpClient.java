@@ -1,6 +1,7 @@
 package com.team142.jgrest.framework.nio;
 
 import com.team142.jgrest.framework.concurrency.DatabasePool;
+import com.team142.jgrest.model.Database;
 import com.team142.jgrest.utils.JsonUtils;
 import com.team142.jgrest.model.HttpResponseBundle;
 import java.io.BufferedReader;
@@ -36,7 +37,8 @@ public class HttpClient {
 
     }
 
-    public static void doPostAndForget(DatabasePool databasePool, String path, Object item) throws TimeoutException, SocketTimeoutException {
+    public static void doPostAndForget(Database database, String path, Object item) throws TimeoutException, SocketTimeoutException {
+        DatabasePool databasePool = database.getDatabasePool();
         databasePool.waitForNext();
         try {
             HttpURLConnection connection = setupConnection(path, "POST");
@@ -70,7 +72,8 @@ public class HttpClient {
 
     }
 
-    public static void doPatchAndForget(DatabasePool databasePool, String path, Object item) throws SocketTimeoutException, TimeoutException {
+    public static void doPatchAndForget(Database database, String path, Object item) throws SocketTimeoutException, TimeoutException {
+        DatabasePool databasePool = database.getDatabasePool();
         databasePool.waitForNext();
         try {
 
@@ -110,7 +113,8 @@ public class HttpClient {
 
     }
 
-    public static void doDeleteAndForget(DatabasePool databasePool, String path) throws SocketTimeoutException, TimeoutException {
+    public static void doDeleteAndForget(Database database, String path) throws SocketTimeoutException, TimeoutException {
+        DatabasePool databasePool = database.getDatabasePool();
         databasePool.waitForNext();
         try {
 
@@ -147,7 +151,8 @@ public class HttpClient {
 
     }
 
-    public static String doGet(DatabasePool databasePool, String path) throws SocketException, TimeoutException {
+    public static String doGet(Database database, String path) throws SocketException, TimeoutException {
+        DatabasePool databasePool = database.getDatabasePool();
         databasePool.waitForNext();
         try {
 
@@ -187,7 +192,8 @@ public class HttpClient {
 
     }
 
-    public static HttpResponseBundle doGetForBundle(DatabasePool databasePool, String path) throws SocketException, TimeoutException {
+    public static HttpResponseBundle doGetForBundle(Database database, String path) throws SocketException, TimeoutException {
+        DatabasePool databasePool = database.getDatabasePool();
         databasePool.waitForNext();
         try {
 
