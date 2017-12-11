@@ -25,14 +25,14 @@ import java.util.logging.Logger;
  */
 public class HttpClient {
 
-    private static HttpURLConnection setupConnection(String path, String method) throws MalformedURLException, ProtocolException, IOException {
+    private static HttpURLConnection setupConnection(Database database, String path, String method) throws MalformedURLException, ProtocolException, IOException {
         URL url = new URL(path);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);
         setVerb(connection, method);
         connection.setRequestProperty("Content-type", "application/json");
-        connection.setConnectTimeout(1000);
-        connection.setReadTimeout(3000);
+        connection.setConnectTimeout(database.getDatabasePool().getTimeoutSecondsMs());
+        connection.setReadTimeout(database.getDatabasePool().getReadTimeout());
         return connection;
 
     }
@@ -41,7 +41,7 @@ public class HttpClient {
         DatabasePool databasePool = database.getDatabasePool();
         databasePool.waitForNext();
         try {
-            HttpURLConnection connection = setupConnection(path, "POST");
+            HttpURLConnection connection = setupConnection(database, path, "POST");
 
             JsonUtils.OBJECT_MAPPER.writeValue(connection.getOutputStream(), item);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -77,7 +77,7 @@ public class HttpClient {
         databasePool.waitForNext();
         try {
 
-            HttpURLConnection connection = setupConnection(path, "PATCH");
+            HttpURLConnection connection = setupConnection(database, path, "PATCH");
 
             JsonUtils.OBJECT_MAPPER.writeValue(connection.getOutputStream(), item);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED
@@ -118,7 +118,7 @@ public class HttpClient {
         databasePool.waitForNext();
         try {
 
-            HttpURLConnection connection = setupConnection(path, "DELETE");
+            HttpURLConnection connection = setupConnection(database, path, "DELETE");
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK && connection.getResponseCode() != HttpURLConnection.HTTP_NO_CONTENT) {
                 databasePool.giveBack();
@@ -156,7 +156,7 @@ public class HttpClient {
         databasePool.waitForNext();
         try {
 
-            HttpURLConnection connection = setupConnection(path, "GET");
+            HttpURLConnection connection = setupConnection(database, path, "GET");
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 databasePool.giveBack();
@@ -197,7 +197,7 @@ public class HttpClient {
         databasePool.waitForNext();
         try {
 
-            HttpURLConnection connection = setupConnection(path, "GET");
+            HttpURLConnection connection = setupConnection(database, path, "GET");
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Failed : HTTP error code : "

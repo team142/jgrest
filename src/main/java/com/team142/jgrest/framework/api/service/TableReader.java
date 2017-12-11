@@ -36,9 +36,11 @@ public class TableReader<T> {
 
     public T getItem(Condition condition) throws SocketException, IOException, TimeoutException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
-        String json = HttpClient.doGet(database.getDatabasePool(), url);
+        String json = HttpClient.doGet(database, url);
         List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
-        if (list.isEmpty()) return null;
+        if (list.isEmpty()) {
+            return null;
+        }
         return list.get(0);
 
     }
@@ -46,7 +48,7 @@ public class TableReader<T> {
     public MultipleResults<T> getItems(Condition condition) throws SocketException, IOException, TimeoutException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         MultipleResults<T> results = new MultipleResults<>();
-        String json = HttpClient.doGet(database.getDatabasePool(), url);
+        String json = HttpClient.doGet(database, url);
         List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
         results.getResults().addAll(list);
         return results;
@@ -56,7 +58,7 @@ public class TableReader<T> {
     public MultipleResults<T> getItems(Condition condition, int start, int end) throws SocketException, IOException, TimeoutException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         MultipleResults<T> results = new MultipleResults<>();
-        String json = HttpClient.doGet(database.getDatabasePool(), url);
+        String json = HttpClient.doGet(database, url);
         List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
         //TODO: show number of rows remaining...
         results.getResults().addAll(list);

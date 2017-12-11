@@ -8,11 +8,13 @@ package com.team142.jgrest.framework.concurrency;
 import com.team142.jgrest.utils.ThreadUtils;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import lombok.Data;
 
 /**
  *
  * @author just1689
  */
+@Data
 public class DatabasePool {
 
     public static final DatabasePool STANDARD_TINY_POOL = new DatabasePool(2, 20, 10, 2000, 1000);
@@ -22,9 +24,9 @@ public class DatabasePool {
     private final int sleep;
     private final int timeoutSecondsMs;
     private final long connectionTimeout;
-    private final long readTimeout;
+    private final int readTimeout;
 
-    public DatabasePool(int size, int sleepMs, int timeoutSeconds, long connectionTimeoutMs, long readTimeoutMs) {
+    public DatabasePool(int size, int sleepMs, int timeoutSeconds, long connectionTimeoutMs, int readTimeoutMs) {
         this.max = size;
         this.sleep = sleepMs;
         this.timeoutSecondsMs = timeoutSeconds * 1000;

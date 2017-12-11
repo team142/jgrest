@@ -6,8 +6,8 @@
  */
 package com.team142.jgrest.framework.generic;
 
-import com.team142.jgrest.framework.concurrency.DatabasePool;
 import com.team142.jgrest.framework.nio.HttpClient;
+import com.team142.jgrest.model.Database;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -19,14 +19,14 @@ import java.util.logging.Logger;
  */
 public class Inserter {
 
-    public static void sync(DatabasePool databasePool, String url, Object o) throws SocketTimeoutException, TimeoutException {
-        HttpClient.doPostAndForget(databasePool, url, o);
+    public static void sync(Database database, String url, Object o) throws SocketTimeoutException, TimeoutException {
+        HttpClient.doPostAndForget(database, url, o);
     }
 
-    public static void async(DatabasePool databasePool, String url, Object o) {
+    public static void async(Database database, String url, Object o) {
         new Thread(() -> {
             try {
-                HttpClient.doPostAndForget(databasePool, url, o);
+                HttpClient.doPostAndForget(database, url, o);
             } catch (SocketTimeoutException | TimeoutException ex) {
                 Logger.getLogger(Deleter.class.getName()).log(Level.SEVERE, null, ex);
             }
