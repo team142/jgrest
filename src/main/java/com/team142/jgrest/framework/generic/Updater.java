@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class Updater {
 
-    public static void update(DatabasePool databasePool, String url, Object o) throws SocketTimeoutException, TimeoutException {
+    public static void sync(DatabasePool databasePool, String url, Object o) throws SocketTimeoutException, TimeoutException {
         HttpClient.doPatchAndForget(databasePool, url, o);
     }
 

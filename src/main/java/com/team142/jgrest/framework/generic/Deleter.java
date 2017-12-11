@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class Deleter {
 
-    public static void delete(DatabasePool databasePool, String url) throws SocketTimeoutException, TimeoutException {
+    public static void sync(DatabasePool databasePool, String url) throws SocketTimeoutException, TimeoutException {
         HttpClient.doDeleteAndForget(databasePool, url);
     }
 

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class Inserter {
 
-    public static void insert(DatabasePool databasePool, String url, Object o) throws SocketTimeoutException, TimeoutException {
+    public static void sync(DatabasePool databasePool, String url, Object o) throws SocketTimeoutException, TimeoutException {
         HttpClient.doPostAndForget(databasePool, url, o);
     }
 
