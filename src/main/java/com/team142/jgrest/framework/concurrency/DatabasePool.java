@@ -15,6 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DatabasePool {
 
+    public static final DatabasePool STANDARD_TINY_POOL = new DatabasePool(2, 20, 10);
+
     private final AtomicInteger current = new AtomicInteger(0);
     private final int max;
     private final int sleep;
