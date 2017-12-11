@@ -19,7 +19,7 @@ public class UrlBuilder {
         StringBuilder url = new StringBuilder(getUrl(database, table));
 
         if (url != null) {
-            url.append("?")
+            url
                     .append("?")
                     .append(condition.getField())
                     .append("=")
