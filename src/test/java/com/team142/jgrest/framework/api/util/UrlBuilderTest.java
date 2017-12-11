@@ -23,7 +23,7 @@ public class UrlBuilderTest {
      * Test of getUrl method, of class UrlBuilder.
      */
     @org.junit.Test
-    public void testGetUrl_Database_String() {
+    public void testGetUrl_Simple() {
         System.out.println("Does the database and table produce a valid ref?");
         String table = "table";
         String expResult = "http://domain.com/table";
@@ -36,7 +36,7 @@ public class UrlBuilderTest {
      * Test of getUrl method, of class UrlBuilder.
      */
     @org.junit.Test
-    public void testGetUrl_4args() throws UnsupportedEncodingException {
+    public void testGetUrl_BasicCondition() throws UnsupportedEncodingException {
         System.out.println("getUrl");
         String table = "table";
         Condition condition = new Condition("id", "eq", "1");
