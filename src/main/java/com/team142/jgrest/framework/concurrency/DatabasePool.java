@@ -26,6 +26,14 @@ public class DatabasePool {
     private final long connectionTimeout;
     private final int readTimeout;
 
+    /**
+     *
+     * @param size The maximum number of active connections
+     * @param sleepMs The time to sleep between waiting for a turn
+     * @param timeoutSeconds How long before denying a request for connections
+     * @param connectionTimeoutMs HTTP connection timeout
+     * @param readTimeoutMs HTTP response read timeout (Change for long running)
+     */
     public DatabasePool(int size, int sleepMs, int timeoutSeconds, long connectionTimeoutMs, int readTimeoutMs) {
         this.max = size;
         this.sleep = sleepMs;
