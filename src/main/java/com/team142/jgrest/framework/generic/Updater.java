@@ -5,8 +5,10 @@
  */
 package com.team142.jgrest.framework.generic;
 
+import com.team142.jgrest.framework.concurrency.DatabasePool;
 import com.team142.jgrest.framework.nio.HttpClient;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -14,8 +16,8 @@ import java.net.SocketTimeoutException;
  */
 public class Updater {
 
-    public static void update(String url, Object o) throws SocketTimeoutException {
-        HttpClient.doPatchAndForget(url, o);
+    public static void update(DatabasePool databasePool, String url, Object o) throws SocketTimeoutException, TimeoutException {
+        HttpClient.doPatchAndForget(databasePool, url, o);
     }
 
 }

@@ -14,6 +14,7 @@ import com.team142.jgrest.utils.JsonUtils;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -33,28 +34,28 @@ public class TableReader<T> {
 
     }
 
-    public T getItem(Condition condition) throws SocketException, IOException {
+    public T getItem(Condition condition) throws SocketException, IOException, TimeoutException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
-        String json = HttpClient.doGet(url);
+        String json = HttpClient.doGet(database.getDatabasePool(), url);
         T item = (T) JsonUtils.OBJECT_MAPPER.readValue(json, clazz);
         return item;
 
     }
 
-    public MultipleResults<T> getItems(Condition condition) throws SocketException, IOException {
+    public MultipleResults<T> getItems(Condition condition) throws SocketException, IOException, TimeoutException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         MultipleResults<T> results = new MultipleResults<>();
-        String json = HttpClient.doGet(url);
+        String json = HttpClient.doGet(database.getDatabasePool(), url);
         List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
         results.getResults().addAll(list);
         return results;
 
     }
 
-    public MultipleResults<T> getItems(Condition condition, int start, int end) throws SocketException, IOException {
+    public MultipleResults<T> getItems(Condition condition, int start, int end) throws SocketException, IOException, TimeoutException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         MultipleResults<T> results = new MultipleResults<>();
-        String json = HttpClient.doGet(url);
+        String json = HttpClient.doGet(database.getDatabasePool(), url);
         List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
         //TODO: show number of rows remaining...
         results.getResults().addAll(list);

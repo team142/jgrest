@@ -1,5 +1,6 @@
 package com.team142.jgrest.framework.nio;
 
+import com.team142.jgrest.framework.concurrency.DatabasePool;
 import com.team142.jgrest.utils.JsonUtils;
 import com.team142.jgrest.model.HttpResponseBundle;
 import java.io.BufferedReader;
@@ -13,6 +14,7 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +23,8 @@ import java.util.logging.Logger;
  */
 public class HttpClient {
 
-    public static void doPostAndForget(String path, Object item) throws SocketTimeoutException {
+    public static void doPostAndForget(DatabasePool databasePool, String path, Object item) throws SocketTimeoutException, TimeoutException {
+        databasePool.waitForNext();
         try {
 
             URL url = new URL(path);
@@ -46,8 +49,9 @@ public class HttpClient {
 //                System.out.println(output);
             }
             connection.disconnect();
+
         } catch (SocketTimeoutException ex) {
-//            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            databasePool.giveBack();
             throw ex;
 
         } catch (MalformedURLException ex) {
@@ -56,10 +60,12 @@ public class HttpClient {
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
 
         }
+        databasePool.giveBack();
 
     }
 
-    public static void doPatchAndForget(String path, Object item) throws SocketTimeoutException {
+    public static void doPatchAndForget(DatabasePool databasePool, String path, Object item) throws SocketTimeoutException, TimeoutException {
+        databasePool.waitForNext();
         try {
 
             URL url = new URL(path);
@@ -95,6 +101,7 @@ public class HttpClient {
             connection.disconnect();
         } catch (SocketTimeoutException ex) {
 //            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            databasePool.giveBack();
             throw ex;
 
         } catch (MalformedURLException ex) {
@@ -103,10 +110,12 @@ public class HttpClient {
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
 
         }
+        databasePool.giveBack();
 
     }
 
-    public static void doDeleteAndForget(String path) throws SocketTimeoutException {
+    public static void doDeleteAndForget(DatabasePool databasePool, String path) throws SocketTimeoutException, TimeoutException {
+        databasePool.waitForNext();
         try {
 
             URL url = new URL(path);
@@ -139,6 +148,7 @@ public class HttpClient {
             connection.disconnect();
 
         } catch (SocketTimeoutException ex) {
+            databasePool.giveBack();
             throw ex;
 
         } catch (MalformedURLException ex) {
@@ -147,10 +157,12 @@ public class HttpClient {
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
 
         }
+        databasePool.giveBack();
 
     }
 
-    public static String doGet(String path) throws SocketException {
+    public static String doGet(DatabasePool databasePool, String path) throws SocketException, TimeoutException {
+        databasePool.waitForNext();
         try {
 
             URL url = new URL(path);
@@ -182,18 +194,21 @@ public class HttpClient {
             return out.toString();
 
         } catch (SocketException ex) {
+            databasePool.giveBack();
             throw ex;
         } catch (MalformedURLException ex) {
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+        databasePool.giveBack();
 
         return "";
 
     }
 
-    public static HttpResponseBundle doGetForBundle(String path) throws SocketException {
+    public static HttpResponseBundle doGetForBundle(DatabasePool databasePool, String path) throws SocketException, TimeoutException {
+        databasePool.waitForNext();
         try {
 
             URL url = new URL(path);
@@ -223,6 +238,7 @@ public class HttpClient {
             HttpResponseBundle httpResponseBundle = new HttpResponseBundle(out.toString(), headerFields);
             connection.disconnect();
 
+            databasePool.giveBack();
             return httpResponseBundle;
 
         } catch (SocketException ex) {
@@ -233,6 +249,7 @@ public class HttpClient {
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        databasePool.giveBack();
         return null;
 
     }

@@ -5,8 +5,10 @@
  */
 package com.team142.jgrest.framework.generic;
 
+import com.team142.jgrest.framework.concurrency.DatabasePool;
 import com.team142.jgrest.framework.nio.HttpClient;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -14,8 +16,8 @@ import java.net.SocketTimeoutException;
  */
 public class Deleter {
 
-    public static void delete(String url) throws SocketTimeoutException {
-        HttpClient.doDeleteAndForget(url);
+    public static void delete(DatabasePool databasePool, String url) throws SocketTimeoutException, TimeoutException {
+        HttpClient.doDeleteAndForget(databasePool, url);
     }
 
 }

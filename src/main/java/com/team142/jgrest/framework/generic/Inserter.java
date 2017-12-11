@@ -6,8 +6,10 @@
  */
 package com.team142.jgrest.framework.generic;
 
+import com.team142.jgrest.framework.concurrency.DatabasePool;
 import com.team142.jgrest.framework.nio.HttpClient;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -15,8 +17,8 @@ import java.net.SocketTimeoutException;
  */
 public class Inserter {
 
-    public static void insert(String url, Object o) throws SocketTimeoutException {
-        HttpClient.doPostAndForget(url, o);
+    public static void insert(DatabasePool databasePool, String url, Object o) throws SocketTimeoutException, TimeoutException {
+        HttpClient.doPostAndForget(databasePool, url, o);
     }
 
 }

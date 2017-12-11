@@ -31,17 +31,17 @@ public class TableWriter<T> {
 
     public void insert(T object) throws Exception {
         String url = UrlBuilder.getUrl(database, table);
-        Inserter.insert(url, object);
+        Inserter.insert(database.getDatabasePool(), url, object);
     }
 
     public void update(Condition condition, T object) throws Exception {
         String url = UrlBuilder.getUrl(database, table);
-        Updater.update(url, object);
+        Updater.update(database.getDatabasePool(), url, object);
     }
 
     public void delete(Condition condition) throws Exception {
         String url = UrlBuilder.getUrl(database, table);
-        Deleter.delete(url);
+        Deleter.delete(database.getDatabasePool(), url);
     }
 
 }
