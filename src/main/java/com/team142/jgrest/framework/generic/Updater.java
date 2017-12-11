@@ -5,7 +5,7 @@
  */
 package com.team142.jgrest.framework.generic;
 
-import com.team142.jgrest.framework.nio.HttpUtils;
+import com.team142.jgrest.framework.nio.HttpClient;
 import java.net.SocketTimeoutException;
 
 /**
@@ -15,7 +15,7 @@ import java.net.SocketTimeoutException;
 public class Updater {
 
     public static void update(String url, Object o) throws SocketTimeoutException {
-        HttpUtils.doPatchAndForget(url, o);
+        HttpClient.doPatchAndForget(url, o);
     }
 
 }

@@ -5,7 +5,7 @@
  */
 package com.team142.jgrest.framework.generic;
 
-import com.team142.jgrest.framework.nio.HttpUtils;
+import com.team142.jgrest.framework.nio.HttpClient;
 import java.net.SocketTimeoutException;
 
 /**
@@ -15,7 +15,7 @@ import java.net.SocketTimeoutException;
 public class Deleter {
 
     public static void delete(String url) throws SocketTimeoutException {
-        HttpUtils.doDeleteAndForget(url);
+        HttpClient.doDeleteAndForget(url);
     }
 
 }

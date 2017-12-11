@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 /**
  * @author Just1689
  */
-public class HttpUtils {
+public class HttpClient {
 
     public static void doPostAndForget(String path, Object item) throws SocketTimeoutException {
         try {
@@ -51,9 +51,9 @@ public class HttpUtils {
             throw ex;
 
         } catch (MalformedURLException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
 
         }
 
@@ -98,9 +98,9 @@ public class HttpUtils {
             throw ex;
 
         } catch (MalformedURLException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
 
         }
 
@@ -142,9 +142,9 @@ public class HttpUtils {
             throw ex;
 
         } catch (MalformedURLException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
 
         }
 
@@ -184,9 +184,9 @@ public class HttpUtils {
         } catch (SocketException ex) {
             throw ex;
         } catch (MalformedURLException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return "";
@@ -228,9 +228,9 @@ public class HttpUtils {
         } catch (SocketException ex) {
             throw ex;
         } catch (MalformedURLException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(HttpUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return null;

@@ -5,7 +5,7 @@
  */
 package com.team142.jgrest.framework.api;
 
-import com.team142.jgrest.framework.nio.HttpUtils;
+import com.team142.jgrest.framework.nio.HttpClient;
 import com.team142.jgrest.model.Condition;
 import com.team142.jgrest.model.Database;
 import com.team142.jgrest.model.MultipleResults;
@@ -34,7 +34,7 @@ public class TableReader<T> {
 
     public T getItem(Condition condition) throws SocketException, IOException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
-        String json = HttpUtils.doGet(url);
+        String json = HttpClient.doGet(url);
         T item = (T) JsonUtils.OBJECT_MAPPER.readValue(json, clazz);
         return item;
 
@@ -43,7 +43,7 @@ public class TableReader<T> {
     public MultipleResults<T> getItems(Condition condition) throws SocketException, IOException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         MultipleResults<T> results = new MultipleResults<>();
-        String json = HttpUtils.doGet(url);
+        String json = HttpClient.doGet(url);
         List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
         results.getResults().addAll(list);
         return results;
@@ -53,7 +53,7 @@ public class TableReader<T> {
     public MultipleResults<T> getItems(Condition condition, int start, int end) throws SocketException, IOException {
         String url = UrlBuilder.getUrl(database, table, condition, true);
         MultipleResults<T> results = new MultipleResults<>();
-        String json = HttpUtils.doGet(url);
+        String json = HttpClient.doGet(url);
         List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
         //TODO: show number of rows remaining...
         results.getResults().addAll(list);
