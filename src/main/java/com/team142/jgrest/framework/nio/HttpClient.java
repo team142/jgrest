@@ -23,30 +23,31 @@ import java.util.logging.Logger;
  * @author Just1689
  */
 public class HttpClient {
-    
-    private void setupConnection(String path, String method) throws MalformedURLException, ProtocolException, IOException {
-            URL url = new URL(path);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            setVerb(connection, method);
-            connection.setRequestProperty("Content-type", "application/json");
-            connection.setConnectTimeout(1000);
-            connection.setReadTimeout(3000);        
+
+    private static HttpURLConnection setupConnection(String path, String method) throws MalformedURLException, ProtocolException, IOException {
+        URL url = new URL(path);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setDoOutput(true);
+        setVerb(connection, method);
+        connection.setRequestProperty("Content-type", "application/json");
+        connection.setConnectTimeout(1000);
+        connection.setReadTimeout(3000);
+        return connection;
+
     }
-    
-    
 
     public static void doPostAndForget(DatabasePool databasePool, String path, Object item) throws SocketTimeoutException, TimeoutException {
         databasePool.waitForNext();
         try {
+            HttpURLConnection connection = setupConnection(path, "POST");
 
-            URL url = new URL(path);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-type", "application/json");
-            connection.setConnectTimeout(1000);
-            connection.setReadTimeout(3000);
+//            URL url = new URL(path);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setDoOutput(true);
+//            connection.setRequestMethod("POST");
+//            connection.setRequestProperty("Content-type", "application/json");
+//            connection.setConnectTimeout(1000);
+//            connection.setReadTimeout(3000);
 
             JsonUtils.OBJECT_MAPPER.writeValue(connection.getOutputStream(), item);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -81,14 +82,14 @@ public class HttpClient {
         databasePool.waitForNext();
         try {
 
-            URL url = new URL(path);
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setRequestProperty("Content-type", "application/json");
-            connection.setConnectTimeout(1000);
-            connection.setReadTimeout(3000);
-            setVerb(connection, "PATCH");
+            HttpURLConnection connection = setupConnection(path, "PATCH");
+//            URL url = new URL(path);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setDoOutput(true);
+//            connection.setRequestProperty("Content-type", "application/json");
+//            connection.setConnectTimeout(1000);
+//            connection.setReadTimeout(3000);
+//            setVerb(connection, "PATCH");
 //            setRequestMethod(connection, "PATCH");
 
             JsonUtils.OBJECT_MAPPER.writeValue(connection.getOutputStream(), item);
@@ -131,16 +132,15 @@ public class HttpClient {
         databasePool.waitForNext();
         try {
 
-            URL url = new URL(path);
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-
-            connection.setRequestMethod("POST");
-
-            connection.setRequestProperty("Content-type", "application/json");
-            connection.setConnectTimeout(1000);
-            connection.setReadTimeout(3000);
+            HttpURLConnection connection = setupConnection(path, "DELETE");
+            
+//            URL url = new URL(path);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setDoOutput(true);
+//            connection.setRequestMethod("POST");
+//            connection.setRequestProperty("Content-type", "application/json");
+//            connection.setConnectTimeout(1000);
+//            connection.setReadTimeout(3000);
 
 //            setRequestMethod(connection, "DELETE");
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK && connection.getResponseCode() != HttpURLConnection.HTTP_NO_CONTENT) {
@@ -179,14 +179,14 @@ public class HttpClient {
         databasePool.waitForNext();
         try {
 
-            URL url = new URL(path);
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Content-type", "application/json");
-            connection.setConnectTimeout(10000);
-            connection.setReadTimeout(10000);
+            HttpURLConnection connection = setupConnection(path, "GET");
+//            URL url = new URL(path);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setDoOutput(true);
+//            connection.setRequestMethod("GET");
+//            connection.setRequestProperty("Content-type", "application/json");
+//            connection.setConnectTimeout(10000);
+//            connection.setReadTimeout(10000);
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 databasePool.giveBack();
@@ -227,14 +227,15 @@ public class HttpClient {
         databasePool.waitForNext();
         try {
 
-            URL url = new URL(path);
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Content-type", "application/json");
-            connection.setConnectTimeout(10000);
-            connection.setReadTimeout(10000);
+            HttpURLConnection connection = setupConnection(path, "GET");
+            
+//            URL url = new URL(path);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setDoOutput(true);
+//            connection.setRequestMethod("GET");
+//            connection.setRequestProperty("Content-type", "application/json");
+//            connection.setConnectTimeout(10000);
+//            connection.setReadTimeout(10000);
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Failed : HTTP error code : "
