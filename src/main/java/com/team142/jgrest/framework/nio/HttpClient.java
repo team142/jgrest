@@ -131,6 +131,7 @@ public class HttpClient {
 
 //            setRequestMethod(connection, "DELETE");
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK && connection.getResponseCode() != HttpURLConnection.HTTP_NO_CONTENT) {
+                databasePool.giveBack();
                 throw new RuntimeException("Failed : HTTP error code : "
                         + connection.getResponseCode());
             }
@@ -175,6 +176,7 @@ public class HttpClient {
             connection.setReadTimeout(10000);
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                databasePool.giveBack();
                 throw new RuntimeException("Failed : HTTP error code : "
                         + connection.getResponseCode());
             }
@@ -191,6 +193,7 @@ public class HttpClient {
             //TODO: handle the output
             connection.disconnect();
 
+            databasePool.giveBack();
             return out.toString();
 
         } catch (SocketException ex) {
