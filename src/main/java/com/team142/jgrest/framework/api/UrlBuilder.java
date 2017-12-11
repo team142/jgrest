@@ -15,7 +15,15 @@ public class UrlBuilder {
         //Start with base url
         StringBuilder url = new StringBuilder(getUrl(database, table));
 
-        //TODO: implement conditions
+        if (url != null) {
+            url.append("?")
+                    .append("?")
+                    .append(condition.getField())
+                    .append("=")
+                    .append(condition.getCondition())
+                    .append(".")
+                    .append(condition.getValue());
+        }
 
         //Add limit
         if (onlyOne) {

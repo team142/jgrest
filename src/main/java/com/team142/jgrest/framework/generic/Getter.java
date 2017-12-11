@@ -7,7 +7,7 @@ package com.team142.jgrest.framework.generic;
 
 import com.team142.jgrest.model.HttpResponseBundle;
 import com.team142.jgrest.model.MultipleResults;
-import com.team142.jgrest.framework.nio.HttpUtils;
+import com.team142.jgrest.framework.nio.HttpClient;
 import com.team142.jgrest.utils.JsonUtils;
 import java.io.IOException;
 import java.net.SocketException;
@@ -27,7 +27,7 @@ public class Getter<T> {
     }
 
     public T getOne(String url) throws SocketException, IOException {
-        String json = HttpUtils.doGet(url);
+        String json = HttpClient.doGet(url);
         List<T> rows = (List<T>) JsonUtils.jsonToList(json, clazz);
         if (rows.isEmpty()) {
             return null;
@@ -36,7 +36,7 @@ public class Getter<T> {
     }
 
     public MultipleResults<T> getMoreThanOne(String url) throws SocketException, IOException {
-        HttpResponseBundle res = HttpUtils.doGetForBundle(url);
+        HttpResponseBundle res = HttpClient.doGetForBundle(url);
         List<T> rows = (List<T>) JsonUtils.jsonToList(res.getBody(), clazz);
         if (rows.isEmpty()) {
             return null;
