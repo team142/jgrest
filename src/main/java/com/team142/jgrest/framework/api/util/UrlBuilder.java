@@ -6,7 +6,10 @@ import com.team142.jgrest.model.Database;
 public class UrlBuilder {
 
     public static String getUrl(Database database, String table) {
-        return database.getUrl() + table;
+        if (database.getUrl().charAt(database.getUrl().length() - 1) == '/') {
+            return database.getUrl() + table;
+        }
+        return database.getUrl() + '/' + table;
 
     }
 
