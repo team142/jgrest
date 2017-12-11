@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
@@ -22,6 +23,18 @@ import java.util.logging.Logger;
  * @author Just1689
  */
 public class HttpClient {
+    
+    private void setupConnection(String path, String method) throws MalformedURLException, ProtocolException, IOException {
+            URL url = new URL(path);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            setVerb(connection, method);
+            connection.setRequestProperty("Content-type", "application/json");
+            connection.setConnectTimeout(1000);
+            connection.setReadTimeout(3000);        
+    }
+    
+    
 
     public static void doPostAndForget(DatabasePool databasePool, String path, Object item) throws SocketTimeoutException, TimeoutException {
         databasePool.waitForNext();
