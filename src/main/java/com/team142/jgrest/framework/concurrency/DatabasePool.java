@@ -15,20 +15,21 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DatabasePool {
 
-    private static final long TIMEOUT_MS = 1 * 60 * 1000;
     private final AtomicInteger current = new AtomicInteger(0);
     private final int max;
     private final int sleep;
+    private final int timeoutSecondsMs;
 
-    public DatabasePool(int size, int sleepMs) {
+    public DatabasePool(int size, int sleepMs, int timeoutSeconds) {
         this.max = size;
         this.sleep = sleepMs;
+        this.timeoutSecondsMs = timeoutSeconds * 1000;
 
     }
 
     public void waitForNext() throws TimeoutException {
         long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < TIMEOUT_MS) {
+        while (System.currentTimeMillis() - startTime < timeoutSecondsMs) {
             synchronized (current) {
                 if (current.get() < max) {
                     int now = current.incrementAndGet();
