@@ -6,6 +6,7 @@
 package com.team142.jgrest.framework.api.util;
 
 import com.team142.jgrest.model.Condition;
+import com.team142.jgrest.model.ConditionBundle;
 import com.team142.jgrest.model.Database;
 import java.io.UnsupportedEncodingException;
 import static org.junit.Assert.*;
@@ -43,6 +44,57 @@ public class UrlBuilderTest {
         boolean onlyOne = false;
         String expResult = "http://domain.com/table?id=eq.1";
         String result = UrlBuilder.getUrl(TEST_DATABASE, table, condition, onlyOne);
+
+        if (!result.equals(expResult)) {
+            System.out.println("Expected");
+            System.out.println(expResult);
+            System.out.println("Instead got");
+            System.out.println(result);
+        }
+
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Test of getUrl method, of class UrlBuilder.
+     */
+    @org.junit.Test
+    public void testGetUrl_BasicCondition2() throws UnsupportedEncodingException {
+        System.out.println("getUrl");
+        String table = "people";
+        Condition condition = new Condition("age", "lt", "13");
+        boolean onlyOne = false;
+        String expResult = "http://domain.com/people?age=lt.13";
+        String result = UrlBuilder.getUrl(TEST_DATABASE, table, condition, onlyOne);
+
+        if (!result.equals(expResult)) {
+            System.out.println("Expected");
+            System.out.println(expResult);
+            System.out.println("Instead got");
+            System.out.println(result);
+        }
+
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Test of getUrl method, of class UrlBuilder.
+     *
+     * @throws java.io.UnsupportedEncodingException
+     */
+    @org.junit.Test
+    public void testGetUrl_ComplexCondition1() throws UnsupportedEncodingException {
+        System.out.println("getUrl");
+        String table = "people";
+        Condition condition1 = new Condition("age", "gte", "18");
+        Condition condition2 = new Condition("student", "is", "true");
+        ConditionBundle bundle = new ConditionBundle(null, condition1, condition2);
+        
+        boolean onlyOne = false;
+        String expResult = "http://domain.com/people?age=gte.18&student=is.true";
+        String result = UrlBuilder.getUrl(TEST_DATABASE, table, bundle, onlyOne);
 
         if (!result.equals(expResult)) {
             System.out.println("Expected");
