@@ -91,10 +91,10 @@ public class UrlBuilderTest {
         String table = "people";
         Condition condition1 = new Condition("age", "gte", "18");
         Condition condition2 = new Condition("student", "is", "true");
-        ConditionBundle bundle = new ConditionBundle(null, condition1, condition2);
+        ConditionBundle bundle = new ConditionBundle("and", condition1, condition2);
 
         boolean onlyOne = false;
-        String expResult = "http://domain.com/people?age=gte.18&student=is.true";
+        String expResult = "http://domain.com/people?and=(age.gte.18,student.is.true)";
         String result = UrlBuilder.getUrl(TEST_DATABASE, table, bundle, onlyOne);
 
         if (!result.equals(expResult)) {

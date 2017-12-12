@@ -16,8 +16,9 @@ public class Condition {
     private String condition;
     private String value;
 
-    public String toQuery(boolean onlyQuery) {
-
+    public String toSimpleQuery(String baseQuery) {
+        StringBuilder result = new StringBuilder(baseQuery);
+        result.append(baseQuery.contains("?") ? "&" : "?");
         String encodedValue = "";
         try {
             encodedValue = URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
@@ -25,12 +26,22 @@ public class Condition {
             Logger.getLogger(Condition.class.getName()).log(Level.SEVERE, null, ex);
             return "";
         }
+        result.append(field).append("=").append(condition).append(".").append(encodedValue);
+        return result.toString();
 
-        if (onlyQuery) {
-            return field + "=" + condition + "." + encodedValue;
+    }
+
+    public String toPieceOfQuery() {
+        StringBuilder result = new StringBuilder();
+        String encodedValue = "";
+        try {
+            encodedValue = URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Condition.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
         }
-        return field + "." + condition + "." + encodedValue;
-
+        result.append(field).append(".").append(condition).append(".").append(encodedValue);
+        return result.toString();
     }
 
 }

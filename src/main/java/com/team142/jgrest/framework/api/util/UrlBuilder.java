@@ -18,44 +18,31 @@ public class UrlBuilder {
     public static String getUrl(Database database, String table, Condition condition, boolean onlyOne) throws UnsupportedEncodingException {
 
         //Start with base url
-        StringBuilder url = new StringBuilder(getUrl(database, table));
+        String url = getUrl(database, table);
 
         if (condition != null) {
-            url
-                    .append("?")
-                    .append(condition.toQuery(true));
+            url += "?";
+            url += condition.toSimpleQuery(table);
         }
 
         //Add limit
         if (onlyOne) {
-            url.append(null == condition ? "?" : "&");
-            url.append("limit=1");
+            url += null == condition ? "?" : "&";
+            url += "limit=1";
         }
-        return url.toString();
+        return url;
 
     }
 
     public static String getUrl(Database database, String table, ConditionBundle conditionBundle, boolean onlyOne) throws UnsupportedEncodingException {
 
         //Start with base url
-        StringBuilder url = new StringBuilder(getUrl(database, table));
+        String url = getUrl(database, table) + "?";
 
-        if (conditionBundle.getJoiner() == null && conditionBundle.getConditions() != null && !conditionBundle.getConditions().isEmpty()) {
-            url.append(conditionBundle.toSimpleQuery());
-            return url.toString();
-        }
-
-        if (conditionBundle.getJoiner() != null && conditionBundle.getConditions() != null && !conditionBundle.getConditions().isEmpty() ) {
-            url.append("?");
-            url.append(conditionBundle.toComplexQuery(true));
-            
-
-        }
-
-
+        url = conditionBundle.toComplexQuery();
 
         //TODO: Add limit
-        return url.toString();
+        return url;
 
     }
 

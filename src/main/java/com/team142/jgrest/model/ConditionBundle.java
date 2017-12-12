@@ -29,46 +29,34 @@ public class ConditionBundle {
 
     }
 
-    public String toSimpleQuery() {
-        StringBuilder out = new StringBuilder("?");
-        for (int i = 0; i < getConditions().size(); i++) {
-            if (i > 0) {
-                out.append("&");
+    public String toComplexQuery() {
+        StringBuilder result = new StringBuilder();
+//        result.append(baseQuery.contains("?") ? "&" : "?");
+
+        result
+                .append(joiner)
+                .append("=(");
+
+        int conditionsCount = 0;
+        for (Condition condition : conditions) {
+            conditionsCount++;
+            if (conditionsCount > 1) {
+                result.append(",");
             }
-            out.append(getConditions().get(i).toQuery(true));
+            result.append(condition.toPieceOfQuery());
         }
-        return out.toString();
-
-    }
-
-    public String toComplexQuery(boolean first) {
-        StringBuilder out = new StringBuilder(first ? "?" : "&");
-
-        boolean firstCondition = true;
-
-        if (joiner != null && !joiner.isEmpty()) {
-            out
-                    .append(joiner)
-                    .append("=(");
-        }
-        
-        for (Condition c : conditions) {
-            firstCondition = false;
-            out.append(c.toQuery(false));
-        }
-        for (ConditionBundle b : conditionBundles) {
-            if (!firstCondition) out.append(",");
-            firstCondition = false;
-            out.append(b.toComplexQuery(false));
+        for (ConditionBundle conditionBundle : conditionBundles) {
+            conditionsCount++;
+            if (conditionsCount > 1) {
+                result.append(",");
+            }
+            result.append(conditionBundle.toComplexQuery());
         }
 
-        if (joiner != null && !joiner.isEmpty()) {
-            out
-                    .append(")");
-        }
+        result
+                .append(")");
 
-        return out.toString();
-
+        return result.toString();
     }
 
 }
