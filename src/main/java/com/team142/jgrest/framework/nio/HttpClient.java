@@ -1,6 +1,7 @@
 package com.team142.jgrest.framework.nio;
 
 import com.team142.jgrest.exceptions.JGrestException;
+import com.team142.jgrest.framework.api.Settings;
 import com.team142.jgrest.framework.concurrency.DatabasePool;
 import com.team142.jgrest.model.Database;
 import com.team142.jgrest.utils.JsonUtils;
@@ -134,6 +135,9 @@ public class HttpClient {
     }
 
     public static String doGet(Database database, String path) throws JGrestException {
+        if (Settings.DEBUG_ON.get()) {
+            Logger.getLogger(HttpClient.class.getName()).log(Level.INFO, "HTTP GET: " + path);
+        }
         DatabasePool databasePool = database.getDatabasePool();
         StringBuilder out = new StringBuilder();
         try {
@@ -161,37 +165,6 @@ public class HttpClient {
 
         databasePool.giveBack();
         return out.toString();
-
-    }
-
-    public static HttpResponseBundle doGetForBundle(Database database, String path) throws JGrestException {
-        DatabasePool databasePool = database.getDatabasePool();
-        try {
-            databasePool.waitForNext();
-            HttpURLConnection connection = setupConnection(database, path, "GET");
-
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED && connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + connection.getResponseCode());
-            }
-
-            String output = connectionToString(connection);
-            Map<String, List<String>> headerFields = connection.getHeaderFields();
-            HttpResponseBundle httpResponseBundle = new HttpResponseBundle(output, headerFields);
-            connection.disconnect();
-
-            databasePool.giveBack();
-            return httpResponseBundle;
-
-        } catch (JGrestException ex) {
-            databasePool.giveBack();
-            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
-        } catch (TimeoutException | IOException ex) {
-            databasePool.giveBack();
-            Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
-            throw new JGrestException(ex);
-        }
 
     }
 

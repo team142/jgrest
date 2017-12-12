@@ -10,6 +10,7 @@ import com.team142.jgrest.framework.api.util.UrlBuilder;
 import com.team142.jgrest.framework.nio.HttpClient;
 import com.team142.jgrest.model.Condition;
 import com.team142.jgrest.model.Database;
+import com.team142.jgrest.model.HttpResponseBundle;
 import com.team142.jgrest.model.MultipleResults;
 import com.team142.jgrest.utils.JsonUtils;
 import java.io.IOException;
@@ -90,11 +91,31 @@ public class TableReader<T> {
 
     }
 
-    public MultipleResults<T> getItems(Condition condition, int start, int end) throws JGrestException {
+    public MultipleResults<T> getAllItems(int limit, int offset) throws JGrestException {
+        MultipleResults<T> results = new MultipleResults<>();
+        results.setResults(new ArrayList<>());
+        try {
+            String url = UrlBuilder.getUrl(database, table);
+            url = UrlBuilder.appendOffset(false, url, limit, offset);
+            String json = HttpClient.doGet(database, url);
+            List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
+            results.getResults().addAll(list);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return results;
+
+    }
+
+    public MultipleResults<T> getItems(Condition condition, int limit, int offset) throws JGrestException {
         MultipleResults<T> results = new MultipleResults<>();
         try {
             String url;
-            url = UrlBuilder.getUrl(database, table, condition, true);
+            url = UrlBuilder.getUrl(database, table, condition, false);
+            url = UrlBuilder.appendOffset(true, url, limit, offset);
+
             String json = HttpClient.doGet(database, url);
             List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
             //TODO: show number of rows remaining...

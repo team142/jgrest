@@ -38,14 +38,14 @@ public class Getter<T> {
         return rows.get(0);
     }
 
-    public MultipleResults<T> getMoreThanOne(String url) throws JGrestException, IOException {
-        HttpResponseBundle res = HttpClient.doGetForBundle(database, url);
-        List<T> rows = (List<T>) JsonUtils.jsonToList(res.getBody(), clazz);
+    public ArrayList<T> getMoreThanOne(String url) throws JGrestException, IOException {
+        ArrayList<T> results = new ArrayList<>();
+        String json = HttpClient.doGet(database, url);
+        List<T> rows = (List<T>) JsonUtils.jsonToList(json, clazz);
         if (rows.isEmpty()) {
             return null;
         }
-        MultipleResults<T> results = new MultipleResults<>(new ArrayList<>(), 0, 0, false);
-        results.getResults().addAll(rows);
+        results.addAll(rows);
         return results;
     }
 

@@ -48,12 +48,15 @@ public class UrlBuilder {
         url += conditionBundle.toComplexQuery(true);
 
         //TODO: Add limit
-
         if (Settings.DEBUG_ON.get()) {
             Logger.getLogger(UrlBuilder.class.getName()).log(Level.INFO, "Created url: {0}", url);
         }
         return url;
 
+    }
+
+    public static String appendOffset(boolean previousConditions, String url, int offset, int limit) {
+        return url + (previousConditions ? "&" : "?") + "offset=" + offset + "&limit=" + limit;
     }
 
 }
