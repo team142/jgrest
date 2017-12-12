@@ -1,9 +1,12 @@
 package com.team142.jgrest.framework.api.util;
 
+import com.team142.jgrest.framework.api.Settings;
 import com.team142.jgrest.model.Condition;
 import com.team142.jgrest.model.ConditionBundle;
 import com.team142.jgrest.model.Database;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UrlBuilder {
 
@@ -30,6 +33,9 @@ public class UrlBuilder {
             url += null == condition ? "?" : "&";
             url += "limit=1";
         }
+        if (Settings.DEBUG_ON.get()) {
+            Logger.getLogger(UrlBuilder.class.getName()).log(Level.INFO, "Created url: {0}", url);
+        }
         return url;
 
     }
@@ -42,6 +48,10 @@ public class UrlBuilder {
         url += conditionBundle.toComplexQuery(true);
 
         //TODO: Add limit
+
+        if (Settings.DEBUG_ON.get()) {
+            Logger.getLogger(UrlBuilder.class.getName()).log(Level.INFO, "Created url: {0}", url);
+        }
         return url;
 
     }

@@ -42,14 +42,15 @@ public class TableReader<T> {
         try {
             String url = UrlBuilder.getUrl(database, table, condition, true);
             String json = HttpClient.doGet(database, url);
-            results.addAll((List<T>) JsonUtils.jsonToList(json, clazz));
-            if (results.isEmpty()) {
-                return null;
-            }
+            List<T> r = (List<T>) JsonUtils.jsonToList(json, clazz);
+            results.addAll(r);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(TableReader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (results.isEmpty()) {
+            return null;
         }
         return results.get(0);
 

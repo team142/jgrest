@@ -146,7 +146,7 @@ public class HttpClient {
                         + connection.getResponseCode());
             }
 
-            String output = connectionToString(connection);
+            connectionToString(connection, out);
             connection.disconnect();
 
         } catch (JGrestException ex) {
@@ -228,6 +228,12 @@ public class HttpClient {
 
     public static String connectionToString(HttpURLConnection connection) {
         StringBuilder out = new StringBuilder();
+        connectionToString(connection, out);
+        return out.toString();
+
+    }
+
+    public static void connectionToString(HttpURLConnection connection, StringBuilder out) {
         try {
             BufferedReader br;
             br = new BufferedReader(new InputStreamReader(
@@ -239,7 +245,6 @@ public class HttpClient {
         } catch (IOException ex) {
             Logger.getLogger(HttpClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return out.toString();
 
     }
 
