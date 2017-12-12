@@ -22,7 +22,7 @@ public class UrlBuilder {
 
         if (condition != null) {
             url += "?";
-            url += condition.toSimpleQuery(table);
+            url = condition.toSimpleQuery(url);
         }
 
         //Add limit
@@ -39,7 +39,7 @@ public class UrlBuilder {
         //Start with base url
         String url = getUrl(database, table) + "?";
 
-        url = conditionBundle.toComplexQuery();
+        url += conditionBundle.toComplexQuery(true);
 
         //TODO: Add limit
         return url;

@@ -29,28 +29,33 @@ public class ConditionBundle {
 
     }
 
-    public String toComplexQuery() {
+    public String toComplexQuery(boolean topLevel) {
         StringBuilder result = new StringBuilder();
-//        result.append(baseQuery.contains("?") ? "&" : "?");
 
-        result
-                .append(joiner)
-                .append("=(");
+        result.append(joiner);
+        if (topLevel) {
+            result.append("=");
+        }
+        result.append("(");
 
         int conditionsCount = 0;
-        for (Condition condition : conditions) {
-            conditionsCount++;
-            if (conditionsCount > 1) {
-                result.append(",");
+        if (conditions != null) {
+            for (Condition condition : conditions) {
+                conditionsCount++;
+                if (conditionsCount > 1) {
+                    result.append(",");
+                }
+                result.append(condition.toPieceOfQuery());
             }
-            result.append(condition.toPieceOfQuery());
         }
-        for (ConditionBundle conditionBundle : conditionBundles) {
-            conditionsCount++;
-            if (conditionsCount > 1) {
-                result.append(",");
+        if (conditionBundles != null) {
+            for (ConditionBundle conditionBundle : conditionBundles) {
+                conditionsCount++;
+                if (conditionsCount > 1) {
+                    result.append(",");
+                }
+                result.append(conditionBundle.toComplexQuery(false));
             }
-            result.append(conditionBundle.toComplexQuery());
         }
 
         result
