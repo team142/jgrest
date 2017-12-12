@@ -18,7 +18,7 @@ public class Condition {
 
     public String toSimpleQuery(String baseQuery) {
         StringBuilder result = new StringBuilder(baseQuery);
-//        result.append(baseQuery.contains("?") ? "&" : "?");
+        result.append(baseQuery.contains("?") ? "" : "?");
         String encodedValue = "";
         try {
             encodedValue = URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
