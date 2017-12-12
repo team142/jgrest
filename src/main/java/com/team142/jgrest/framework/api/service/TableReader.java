@@ -58,8 +58,9 @@ public class TableReader<T> {
 
     public MultipleResults<T> getItems(Condition condition) throws JGrestException {
         MultipleResults<T> results = new MultipleResults<>();
+        results.setResults(new ArrayList<>());
         try {
-            String url = UrlBuilder.getUrl(database, table, condition, true);
+            String url = UrlBuilder.getUrl(database, table, condition, false);
             String json = HttpClient.doGet(database, url);
             List<T> list = (List<T>) JsonUtils.jsonToList(json, clazz);
             results.getResults().addAll(list);
