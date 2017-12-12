@@ -24,21 +24,25 @@ Coming soon!
 ## Features
 
 
-### Completed
+### Complete & tested
 
-- Insert a row
-- Delete a row
+- Get one row
+- Get many rows by condition
+- Simple query
+- Complex query
 - Get all rows in a table
 
-### Next to be implemented
 
-- Single condition
+### Completed but not fully tested
+
+- Insert a row
 - Update a row
+- Delete a row
 
 
 ### Planned
 
-- Multiple conditions
-- Get a row by a condition
-- Get rows from a table by a simple query.
-- Get rows from a table by a complex query.
+- Offsets & limits
+- IteratorAbstractor
+- Selected columns
+- Security token
