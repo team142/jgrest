@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/team142/jgrest.svg?branch=master)](https://travis-ci.org/team142/jgrest)
+
 # JGrest
 
 The goal of this project is to build a simple HTTP client for consuming a Postgrest endpoint. 
