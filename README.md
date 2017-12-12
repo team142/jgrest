@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/team142/jgrest.svg?branch=master)](https://travis-ci.org/team142/jgrest)
+[![Pending Pull-Requests](http://githubbadges.herokuapp.com/team142/jgrest/pulls.svg?style=flat)](https://github.com/azagniotov/stubby4j/pulls)
+[![Github Issues](http://githubbadges.herokuapp.com/team142/jgrest/issues.svg?style=flat)](https://github.com/azagniotov/stubby4j/issues)
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat)](http://badges.mit-license.org)
 
 # JGrest
 
