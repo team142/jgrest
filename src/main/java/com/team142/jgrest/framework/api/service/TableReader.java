@@ -10,7 +10,6 @@ import com.team142.jgrest.framework.api.util.UrlBuilder;
 import com.team142.jgrest.framework.nio.HttpClient;
 import com.team142.jgrest.model.Condition;
 import com.team142.jgrest.model.Database;
-import com.team142.jgrest.model.HttpResponseBundle;
 import com.team142.jgrest.model.MultipleResults;
 import com.team142.jgrest.utils.JsonUtils;
 import java.io.IOException;

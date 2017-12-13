@@ -6,8 +6,6 @@
 package com.team142.jgrest.framework.generic;
 
 import com.team142.jgrest.exceptions.JGrestException;
-import com.team142.jgrest.model.HttpResponseBundle;
-import com.team142.jgrest.model.MultipleResults;
 import com.team142.jgrest.framework.nio.HttpClient;
 import com.team142.jgrest.model.Database;
 import com.team142.jgrest.utils.JsonUtils;
