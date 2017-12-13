@@ -1,4 +1,4 @@
-# JGrest
+# JGrest - Java PostGrest client
 
 [![Build Status](https://travis-ci.org/team142/jgrest.svg?branch=master)](https://travis-ci.org/team142/jgrest)
 [![Pending Pull-Requests](http://githubbadges.herokuapp.com/team142/jgrest/pulls.svg?style=flat)](https://github.com/team142/jgrest/pulls)
